@@ -6,6 +6,8 @@ import ClientLayout from "@/components/ClientLayout";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -19,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+    <html lang="en" className={inter.variable}>
+      <body className="antialiased">
         <ClientLayout>
           {children}
         </ClientLayout>
