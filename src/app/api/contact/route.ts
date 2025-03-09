@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server'
+import { Resend } from 'resend'
+
+// Initialize Resend with your API key
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
   try {
@@ -13,9 +17,19 @@ export async function POST(request: Request) {
       )
     }
 
-    // Here you would typically send the email using a service like SendGrid, AWS SES, etc.
-    // For now, we'll just log it and return success
-    console.log('Contact form submission:', { name, email, message })
+    // Send email using Resend
+    await resend.emails.send({
+      from: 'onboarding@resend.dev', // You can change this to your verified domain later
+      to: 'your-email@example.com', // Replace with your email address
+      subject: `New Contact Form Submission from ${name}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `
+    })
 
     // Return success response
     return NextResponse.json(
