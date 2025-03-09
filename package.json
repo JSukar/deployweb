@@ -17,6 +17,7 @@
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^0.9.508",
     "@types/bcrypt": "^5.0.2",
+    "@vercel/analytics": "^1.5.0",
     "bcrypt": "^5.1.1",
     "framer-motion": "^12.4.10",
     "next": "14.2.0",
