@@ -5,8 +5,21 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
-  console.log('Contact form API route hit')
-  
+  // Log initial request
+  console.log('Contact form API route hit:', new Date().toISOString())
+
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    return new NextResponse(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    })
+  }
+
   try {
     // Log request details
     console.log('Request method:', request.method)
@@ -20,9 +33,15 @@ export async function POST(request: Request) {
     // Validate the input
     if (!name || !email || !message) {
       console.log('Missing required fields:', { name, email, message })
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+      return new NextResponse(
+        JSON.stringify({ error: 'Missing required fields' }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
       )
     }
 
@@ -53,9 +72,15 @@ export async function POST(request: Request) {
       })
       console.log('Resend API response:', result)
 
-      return NextResponse.json(
-        { message: 'Message sent successfully' },
-        { status: 200 }
+      return new NextResponse(
+        JSON.stringify({ message: 'Message sent successfully' }),
+        {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
       )
     } catch (emailError) {
       console.error('Error sending email:', emailError)
@@ -66,9 +91,15 @@ export async function POST(request: Request) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to process contact form'
     console.error('Error message:', errorMessage)
     
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ error: errorMessage }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
     )
   }
 } 

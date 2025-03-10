@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState, ChangeEvent, MouseEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 
 interface FormData {
   name: string;
@@ -24,11 +24,10 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const submitForm = async () => {
     if (isSubmitting) return;
+
+    // Client-side validation
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({
         type: 'error',
@@ -41,8 +40,8 @@ export default function Contact() {
     setStatus({ type: null, message: '' });
 
     try {
-      console.log('Submitting form with data:', formData);
-      
+      console.log('Attempting to submit form...', formData);
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -51,7 +50,7 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
-      console.log('Response status:', response.status);
+      console.log('Server response received:', response.status);
       const data = await response.json();
       console.log('Response data:', data);
 
@@ -59,6 +58,7 @@ export default function Contact() {
         throw new Error(data.error || 'Failed to send message');
       }
 
+      // Clear form and show success message
       setFormData({ name: '', email: '', message: '' });
       setStatus({
         type: 'success',
@@ -75,13 +75,13 @@ export default function Contact() {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   return (
     <section id="contact" className="py-20 bg-black">
@@ -114,20 +114,21 @@ export default function Contact() {
             </div>
           )}
 
-          <div className="space-y-6" onClick={e => e.preventDefault()}>
+          <div className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                 Name
               </label>
               <input
                 type="text"
-                name="name"
                 id="name"
+                name="name"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="mt-1 block w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Your name"
                 disabled={isSubmitting}
+                autoComplete="off"
               />
             </div>
 
@@ -137,13 +138,14 @@ export default function Contact() {
               </label>
               <input
                 type="email"
-                name="email"
                 id="email"
+                name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 className="mt-1 block w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="your@email.com"
                 disabled={isSubmitting}
+                autoComplete="off"
               />
             </div>
 
@@ -152,10 +154,10 @@ export default function Contact() {
                 Message
               </label>
               <textarea
-                name="message"
                 id="message"
+                name="message"
                 value={formData.message}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 rows={4}
                 className="mt-1 block w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Tell us about your project"
@@ -166,7 +168,7 @@ export default function Contact() {
             <div>
               <button
                 type="button"
-                onClick={handleSubmit}
+                onClick={() => submitForm()}
                 disabled={isSubmitting}
                 className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                   isSubmitting
@@ -181,5 +183,5 @@ export default function Contact() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 } 
