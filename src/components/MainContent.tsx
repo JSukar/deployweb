@@ -6,6 +6,7 @@ import Process from './Process'
 import DnaScene from './DnaScene'
 import WorkShowcase from './WorkShowcase'
 import Testimonials from './Testimonials'
+import Contact from './Contact'
 import { useState } from 'react'
 
 interface MainContentProps {
@@ -176,72 +177,7 @@ export default function MainContent({ visible }: MainContentProps) {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="relative w-full bg-black pt-0 pb-32">
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6 [text-shadow:_0_2px_10px_rgba(0,0,0,0.3)]">
-              Get Started
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
-              Ready to transform your business? Let's talk.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-2xl mx-auto"
-          >
-            <form className="space-y-6 bg-black/50 p-8 rounded-2xl shadow-2xl backdrop-blur-lg border border-white/10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="mt-1 block w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="mt-1 block w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300">Message</label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="mt-1 block w-full rounded-xl bg-white/10 border border-white/20 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200"
-                  placeholder="Tell us about your project"
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-200"
-                >
-                  Send Message
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        </div>
-      </section>
+      <Contact />
     </div>
   )
 } 
