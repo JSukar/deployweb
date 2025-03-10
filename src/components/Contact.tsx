@@ -25,7 +25,9 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault() // Prevent form from submitting normally
+    if (isSubmitting) return // Prevent double submission
+
     setIsSubmitting(true)
     setStatus({ type: null, message: '' })
 
@@ -97,7 +99,7 @@ export default function Contact() {
           {status.type && (
             <div
               className={`mb-6 p-4 rounded-md ${
-                status.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+                status.type === 'success' ? 'bg-green-50/10 text-green-400' : 'bg-red-50/10 text-red-400'
               }`}
             >
               {status.message}
@@ -162,7 +164,7 @@ export default function Contact() {
                 disabled={isSubmitting}
                 className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                   isSubmitting
-                    ? 'bg-blue-400 cursor-not-allowed'
+                    ? 'bg-blue-400/50 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
                 }`}
               >
