@@ -43,7 +43,7 @@ export default function MainContent({ visible }: MainContentProps) {
       >
         {/* Blur backdrop for hero section only */}
         <motion.div 
-          className="fixed inset-0 backdrop-blur-xl bg-black/30 pointer-events-none"
+          className="absolute inset-0 backdrop-blur-xl bg-black/30 pointer-events-none z-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: visible ? 1 : 0 }}
           transition={{ duration: 2, delay: 2 }}
