@@ -29,6 +29,8 @@ export default function Contact() {
     setIsSubmitting(true)
     setStatus({ type: null, message: '' })
 
+    console.log('Submitting form with data:', formData)
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -38,7 +40,9 @@ export default function Contact() {
         body: JSON.stringify(formData),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to send message')
@@ -51,6 +55,7 @@ export default function Contact() {
         message: 'Thank you! Your message has been sent successfully.'
       })
     } catch (error) {
+      console.error('Form submission error:', error)
       setStatus({
         type: 'error',
         message: error instanceof Error ? error.message : 'Failed to send message'
