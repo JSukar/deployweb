@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, MouseEvent } from 'react'
 
 interface FormData {
   name: string;
@@ -24,7 +24,10 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (isSubmitting) return;
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({
@@ -111,7 +114,7 @@ export default function Contact() {
             </div>
           )}
 
-          <div className="space-y-6">
+          <div className="space-y-6" onClick={e => e.preventDefault()}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                 Name
@@ -162,6 +165,7 @@ export default function Contact() {
 
             <div>
               <button
+                type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
