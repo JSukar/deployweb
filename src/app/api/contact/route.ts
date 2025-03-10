@@ -73,7 +73,11 @@ export async function POST(request: Request) {
       console.log('Resend API response:', result)
 
       return new NextResponse(
-        JSON.stringify({ message: 'Message sent successfully' }),
+        JSON.stringify({ 
+          success: true,
+          message: 'Message sent successfully',
+          data: result
+        }),
         {
           status: 200,
           headers: {

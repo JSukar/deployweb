@@ -58,11 +58,15 @@ export default function Contact() {
         throw new Error(data.error || 'Failed to send message');
       }
 
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+
       // Clear form and show success message
       setFormData({ name: '', email: '', message: '' });
       setStatus({
         type: 'success',
-        message: 'Thank you! Your message has been sent successfully.'
+        message: data.message || 'Thank you! Your message has been sent successfully.'
       });
     } catch (error) {
       console.error('Form submission error:', error);
