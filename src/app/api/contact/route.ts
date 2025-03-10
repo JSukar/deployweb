@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       console.log('Attempting to send email via Resend...')
       const result = await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: 'joe@jsukar.com',
+        to: 'joe@jiss.tech',
         replyTo: email,
         subject: `New Contact Form Submission from ${name}`,
         html: `
@@ -71,6 +71,24 @@ export async function POST(request: Request) {
         `
       })
       console.log('Resend API response:', result)
+
+      // Check for Resend API errors
+      if (result.error) {
+        const errorResponse = {
+          success: false,
+          error: result.error.message,
+          message: 'Failed to send message: ' + result.error.message
+        };
+        console.log('Sending error response:', errorResponse);
+        
+        return new Response(JSON.stringify(errorResponse), {
+          status: 403, // Use 403 for test mode restriction
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
 
       const responseData = {
         success: true,

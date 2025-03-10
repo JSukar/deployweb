@@ -68,7 +68,9 @@ export default function Contact() {
       }
 
       if (!data?.success) {
-        throw new Error(data?.message || 'Failed to send message');
+        const errorMsg = data?.error || data?.message || 'Failed to send message';
+        console.error('Form submission failed:', errorMsg);
+        throw new Error(errorMsg);
       }
 
       // Clear form and show success message
