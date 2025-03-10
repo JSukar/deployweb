@@ -58,16 +58,25 @@ export async function POST(request: Request) {
     try {
       console.log('Attempting to send email via Resend...')
       const result = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'joe@jiss.tech',
+        from: 'contact@deploy.ltd',
+        to: 'joe@deploy.ltd',
         replyTo: email,
         subject: `New Contact Form Submission from ${name}`,
         html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">New Contact Form Submission</h2>
+            <div style="margin: 20px 0;">
+              <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
+              <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
+              <p style="margin: 10px 0;"><strong>Message:</strong></p>
+              <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 5px;">
+                ${message.replace(/\n/g, '<br>')}
+              </div>
+            </div>
+            <div style="color: #666; font-size: 12px; margin-top: 20px; padding-top: 10px; border-top: 1px solid #eee;">
+              Sent from your website contact form
+            </div>
+          </div>
         `
       })
       console.log('Resend API response:', result)
