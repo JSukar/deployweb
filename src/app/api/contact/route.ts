@@ -72,20 +72,20 @@ export async function POST(request: Request) {
       })
       console.log('Resend API response:', result)
 
-      return new NextResponse(
-        JSON.stringify({ 
-          success: true,
-          message: 'Message sent successfully',
-          data: result
-        }),
-        {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        }
-      )
+      const responseData = {
+        success: true,
+        message: 'Message sent successfully',
+        data: result
+      };
+      console.log('Sending response:', responseData);
+
+      return new Response(JSON.stringify(responseData), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
     } catch (emailError) {
       console.error('Error sending email:', emailError)
       throw emailError
@@ -95,15 +95,19 @@ export async function POST(request: Request) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to process contact form'
     console.error('Error message:', errorMessage)
     
-    return new NextResponse(
-      JSON.stringify({ error: errorMessage }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      }
-    )
+    const errorResponse = {
+      success: false,
+      error: errorMessage,
+      message: 'Failed to send message'
+    };
+    console.log('Sending error response:', errorResponse);
+
+    return new Response(JSON.stringify(errorResponse), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
   }
 } 

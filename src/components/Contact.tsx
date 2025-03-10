@@ -51,15 +51,24 @@ export default function Contact() {
       });
 
       console.log('Server response received:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('Parsed response data:', data);
+      } catch (parseError) {
+        console.error('Failed to parse response:', parseError);
+        throw new Error('Invalid response from server');
       }
 
-      if (!data.success) {
-        throw new Error(data.message || 'Failed to send message');
+      if (!response.ok) {
+        throw new Error(data?.error || 'Failed to send message');
+      }
+
+      if (!data?.success) {
+        throw new Error(data?.message || 'Failed to send message');
       }
 
       // Clear form and show success message
