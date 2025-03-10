@@ -25,47 +25,52 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault() // Prevent form from submitting normally
-    if (isSubmitting) return // Prevent double submission
+    // Ensure the event is prevented
+    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.stopPropagation) e.stopPropagation();
+    
+    // Prevent double submission
+    if (isSubmitting) return;
 
-    setIsSubmitting(true)
-    setStatus({ type: null, message: '' })
-
-    console.log('Submitting form with data:', formData)
+    setIsSubmitting(true);
+    setStatus({ type: null, message: '' });
 
     try {
+      console.log('Submitting form with data:', formData);
+      
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      console.log('Response status:', response.status)
-      const data = await response.json()
-      console.log('Response data:', data)
+      console.log('Response status:', response.status);
+      const data = await response.json();
+      console.log('Response data:', data);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message')
+        throw new Error(data.error || 'Failed to send message');
       }
 
-      // Clear form on success
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({ name: '', email: '', message: '' });
       setStatus({
         type: 'success',
         message: 'Thank you! Your message has been sent successfully.'
-      })
+      });
     } catch (error) {
-      console.error('Form submission error:', error)
+      console.error('Form submission error:', error);
       setStatus({
         type: 'error',
         message: error instanceof Error ? error.message : 'Failed to send message'
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+
+    return false; // Ensure no form submission
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -106,7 +111,7 @@ export default function Contact() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                 Name
@@ -160,7 +165,11 @@ export default function Contact() {
 
             <div>
               <button
-                type="submit"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit(e as any);
+                }}
                 disabled={isSubmitting}
                 className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                   isSubmitting
