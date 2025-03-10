@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 
 interface FormData {
   name: string;
@@ -24,13 +24,15 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    // Ensure the event is prevented
-    if (e && e.preventDefault) e.preventDefault();
-    if (e && e.stopPropagation) e.stopPropagation();
-    
-    // Prevent double submission
+  const handleSubmit = async () => {
     if (isSubmitting) return;
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus({
+        type: 'error',
+        message: 'Please fill in all fields'
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     setStatus({ type: null, message: '' });
@@ -68,8 +70,6 @@ export default function Contact() {
     } finally {
       setIsSubmitting(false);
     }
-
-    return false; // Ensure no form submission
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -111,7 +111,7 @@ export default function Contact() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+          <div className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                 Name
@@ -120,7 +120,6 @@ export default function Contact() {
                 type="text"
                 name="name"
                 id="name"
-                required
                 value={formData.name}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
@@ -137,7 +136,6 @@ export default function Contact() {
                 type="email"
                 name="email"
                 id="email"
-                required
                 value={formData.email}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
@@ -153,7 +151,6 @@ export default function Contact() {
               <textarea
                 name="message"
                 id="message"
-                required
                 value={formData.message}
                 onChange={handleChange}
                 rows={4}
@@ -165,11 +162,7 @@ export default function Contact() {
 
             <div>
               <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubmit(e as any);
-                }}
+                onClick={handleSubmit}
                 disabled={isSubmitting}
                 className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                   isSubmitting
@@ -180,7 +173,7 @@ export default function Contact() {
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </div>
-          </form>
+          </div>
         </motion.div>
       </div>
     </section>
